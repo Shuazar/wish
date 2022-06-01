@@ -5,16 +5,21 @@ from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
 
 from tgbot.config import load_config
+from tgbot.dal.postgresql import Database
 from tgbot.handlers.admin import admin_router
 from tgbot.handlers.echo import echo_router
 from tgbot.handlers.user import user_router
 from tgbot.middlewares.config import ConfigMiddleware
 from tgbot.services import broadcaster
-
+from loader import db
 logger = logging.getLogger(__name__)
 
 
 async def on_startup(bot: Bot, admin_ids: list[int]):
+    await db.create()
+    await db.drop_users()
+    logging.info("Creating table users...")
+    await db.create_table_users()
     await broadcaster.broadcast(bot, admin_ids, "Bot is working")
 
 
@@ -30,8 +35,8 @@ async def main():
     )
     logger.info("Starting bot")
     config = load_config(".env")
-
     storage = MemoryStorage()
+
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
 
@@ -43,6 +48,7 @@ async def main():
         dp.include_router(router)
 
     register_global_middlewares(dp, config)
+    logging.info(f"Create connection to database")
 
     await on_startup(bot, config.tg_bot.admin_ids)
     await dp.start_polling(bot)
