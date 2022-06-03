@@ -1,10 +1,11 @@
 from typing import Union
-
+import logging
 import asyncpg
 from asyncpg import Connection
 
 from tgbot.config import load_config
 from asyncpg.pool import Pool
+
 
 config = load_config(".env")
 
@@ -51,6 +52,7 @@ class Database:
            );
            """
         await self.execute(sql, execute=True)
+        logging.info(config.db.postgres_uri)
 
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
@@ -69,7 +71,7 @@ class Database:
 
     async def select_user(self, **kwargs):
         sql = "SELECT * FROM Users WHERE "
-        sql, parameters = await self.format_args(sql, parameters=kwargs)
+        sql, parameters = self.format_args(sql, parameters=kwargs)
         return await self.execute(sql, *parameters, fetchrow=True)
 
     async def select_all_users(self):
@@ -80,9 +82,9 @@ class Database:
         sql = "SELECT * FROM Users"
         return await self.execute(sql, fetchval=True)
 
-    async def update_user_username(self,username,telegram_id):
-        sql = "UPDATE Users SET username=$1 WHERE telegram_id=S2"
-        return await self.execute(sql, username,telegram_id, execute=True)
+    async def update_user_username(self, username, telegram_id):
+        sql = "UPDATE Users SET username=$1 WHERE telegram_id=$2"
+        return await self.execute(sql, username, telegram_id, execute=True)
 
     async def delete_users(self):
         await self.execute("DELETE FROM Users WHERE TRUE", execute=True)
