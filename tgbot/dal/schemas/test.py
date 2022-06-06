@@ -10,7 +10,7 @@ async def test():
     await db_gino.gino.create_all()
 
     print("Adding users")
-    await quick_commands.add_user(1,"One","Email")
+    await quick_commands.add_user(1, "One", "Email")
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test())

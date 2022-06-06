@@ -20,7 +20,7 @@ async def on_startup(bot: Bot, admin_ids: list[int],config):
     await db.drop_users()
     logging.info("Creating table users...")
     await db.create_table_users()
-    # await db_gino.set_bind(config.db.postgres_uri)
+    await db_gino.set_bind(config.db.postgres_uri)
     await broadcaster.broadcast(bot, admin_ids, "Bot is working")
 
 

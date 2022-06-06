@@ -4,9 +4,10 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram.utils.markdown import hcode
 
-from loader import db
+from loader import db, db_gino
 
-from tgbot.dal.postgresql import Database
+from tgbot.dal.postgresql import Database, config
+from tgbot.dal.schemas import quick_commands
 from tgbot.filters.admin import AdminFilter
 
 admin_router = Router()
@@ -19,7 +20,7 @@ async def admin_start(message: Message):
         user = await db.add_user(
             full_name=message.from_user.full_name,
             username=message.from_user.username,
-            telegram_id = message.from_user.id,
+            telegram_id=message.from_user.id,
         )
     except asyncpg.exceptions.UniqueViolationError:
         user = await db.select_user(telegram_id=message.from_user.id)
@@ -63,4 +64,12 @@ async def enter_username(message: Message, state: FSMContext):
                              f"{user=}"
                          ))
     await state.clear()
+
+
+@admin_router.message(commands=["gino"])
+async def start_gino(message: Message):
+    await db_gino.set_bind(config.db.postgres_uri)
+    await db_gino.gino.drop_all()
+    await db_gino.gino.create_all()
+    await quick_commands.add_user(1, "One", "Email")
 
