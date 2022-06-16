@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  dp:
+  db:
     container_name: database
     image: sameersbn/postgresql:10-2
     environment:
@@ -12,13 +12,15 @@ services:
     networks:
       - botnet
     volumes:
-      - ./pgdata:/var/lib/postgresql
+      - ./postgresql:/var/lib/postgresql
 
   tgbot:
     container_name: bot
     build:
       context: .
     command: python bot.py
+    volumes:
+      - .:/src
     restart: always
     networks:
       - botnet
@@ -26,6 +28,26 @@ services:
       - ".env"
     depends_on:
       - db
+      - django
+  django:
+    container_name: djangoproject
+      build:
+        context: .
+      command: python django_app.py runserver 0.0.0.0:8000 --noreload
+      ports:
+        - 8000:8000
+      networks:
+        - botnet
+      restart: always
+
+      volumes:
+        - .:/src
+      env_file:
+        - ".env"
+      # Бот стартует после запуска базы
+      depends_on:
+        - db
+
   networks:
     botnet:
       driver: bridge

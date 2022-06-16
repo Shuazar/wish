@@ -9,7 +9,6 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "user_id", "username", "created_at", "fullname")
 
 
-
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "price", "category_name", "subcategory_name")
