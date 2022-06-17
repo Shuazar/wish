@@ -32,7 +32,7 @@ services:
   django:
     container_name: djangoproject
       build:
-        context: .
+        context:
       command: python django_app.py runserver 0.0.0.0:8000 --noreload
       ports:
         - 8000:8000

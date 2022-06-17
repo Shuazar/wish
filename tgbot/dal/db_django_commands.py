@@ -1,8 +1,7 @@
 import os
 from typing import List
 
-import django
-from asyncpg import UniqueViolationError
+from django.db import IntegrityError
 
 from django_project.wish.wish_admin.models import Item, User
 from asgiref.sync import sync_to_async
@@ -18,7 +17,7 @@ def select_user(user_id: int):
 def add_user(user_id, username, full_name):
     try:
         User(user_id=int(user_id), username=username, fullname=full_name).save()
-    except UniqueViolationError:
+    except IntegrityError:
         pass
 
 
