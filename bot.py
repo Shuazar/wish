@@ -20,6 +20,8 @@ from tgbot.config import load_config
 from tgbot.middlewares.config import ConfigMiddleware
 from tgbot.services import broadcaster
 from tgbot.handlers.admin import admin_router
+from tgbot.handlers.menu import menu_router
+from tgbot.handlers.start import start_router
 logger = logging.getLogger(__name__)
 
 
@@ -46,8 +48,10 @@ async def main():
     dp = Dispatcher(storage=storage)
 
     for router in [
+        start_router,
         admin_router,
-        echo_router
+        menu_router,
+        echo_router,
     ]:
         dp.include_router(router)
         # dp.include_router(questions.router)

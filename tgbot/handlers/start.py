@@ -1,20 +1,14 @@
-from aiogram import Router, Bot
-from tgbot.dal import db_django_commands as commands
+from aiogram import  Router
 from aiogram.types import Message
+from tgbot.dal import db_django_commands as commands
 
-from tgbot.filters.admin import AdminFilter
-
-admin_router = Router()
-admin_router.message.filter(AdminFilter())
+start_router = Router()
 
 
-@admin_router.message(commands=["dice"])
-async def send_dice(message: Message, bot: Bot):
-    await bot.send_dice(message.from_user.id)
-
-
-@admin_router.message(commands=["start_django"], state="*")
-async def add_new_user(message: Message):
+@start_router.message(commands=["start"])
+async def bot_start(message: Message):
+    await message.answer(f'Hi, {message.from_user.full_name}! '
+                         f'press /menu')
     user = await commands.add_user(user_id=message.from_user.id,
                                    full_name=message.from_user.full_name,
                                    username=message.from_user.username)
