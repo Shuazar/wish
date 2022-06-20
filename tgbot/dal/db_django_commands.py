@@ -34,8 +34,8 @@ def count_users():
 
 @sync_to_async
 def add_item(**kwargs):
-    newitem = Item(**kwargs).save()
-    return newitem
+    new_item = Item(**kwargs).save()
+    return new_item
 
 
 @sync_to_async
@@ -58,8 +58,8 @@ def count_items(category_code, subcategory_code=None) -> int:
 
 
 @sync_to_async
-def get_items(category_code, subcategory_code) -> List[Item]:
-    return Item.objects.filter(category_code=category_code, subcategory_code=subcategory_code).all()
+def get_items(category_code) -> List[Item]:
+    return Item.objects.filter(category_code=category_code).all()
 
 
 @sync_to_async
