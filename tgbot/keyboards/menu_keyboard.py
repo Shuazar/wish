@@ -6,6 +6,8 @@ import logging
 
 
 logger = logging.getLogger()
+
+
 class ItemsCallbackFactory(CallbackData, prefix="item"):
     level: int
     category: Optional[str]
@@ -25,7 +27,7 @@ async def categories_keyboard():
         count = await count_items(category.category_code)
         builder.button(
             text=f"{category.category_name} ({count})",
-            callback_data=ItemsCallbackFactory(level=CURRENT_LEVEL,
+            callback_data=ItemsCallbackFactory(level=CURRENT_LEVEL+1,
                                                category=category.category_code
                                                )
         )

@@ -21,7 +21,7 @@ async def cmd_numbers_fab(message: types.Message):
 
 async def list_categories(message: Union[Message, CallbackQuery], **kwargs):
     with suppress(TelegramBadRequest):
-        logger.info("--------------------------------------")
+        logger.info("----------------list_categories----------------------")
         markup = await categories_keyboard()
 
         if isinstance(message, Message):
@@ -34,15 +34,15 @@ async def list_categories(message: Union[Message, CallbackQuery], **kwargs):
 
 async def list_items(callback: CallbackQuery, category,  **kwargs):
     with suppress(TelegramBadRequest):
-        logger.info("--------------------------------------Items")
+        logger.info("-------------------list_items-------------------Items")
         markup = await items_keyboard(category=category)
         await callback.message.edit_text(text="\U00002b07 בחר אחד מהפריטים ", reply_markup=markup)
 
 
 async def show_item(callback: CallbackQuery, category, subcategory, item_id):
     with suppress(TelegramBadRequest):
-        logger.info("--------------------------------------")
-        markup = await item_keyboard(category, subcategory, item_id)
+        logger.info("-----------------show_item---------------------")
+        markup = item_keyboard(category, subcategory, item_id)
 
         item = await get_item(item_id)
         text = f"Buy {item}"
@@ -61,9 +61,8 @@ async def navigate(call: CallbackQuery, callback_data: ItemsCallbackFactory):
     logger.info(f"subcategory --------- {subcategory}")
     logger.info(f"item_id --------- {item_id}")
     if current_level == 0:
-        await list_items(call, category=category, subcategory=subcategory, item_id=item_id)
-        # await list_categories(call, category=category, subcategory=subcategory, item_id=item_id)
-    elif current_level == 2:
+        await list_categories(call, category=category, subcategory=subcategory, item_id=item_id)
+    elif current_level == 1:
         await list_items(call, category=category, subcategory=subcategory, item_id=item_id)
     else:
         await show_item(call, category=category, subcategory=subcategory, item_id=item_id)
