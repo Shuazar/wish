@@ -65,3 +65,7 @@ def get_items(category_code) -> List[Item]:
 @sync_to_async
 def get_item(item_id) -> Item:
     return Item.objects.filter(id=int(item_id)).first()
+
+
+def stam_func():
+    pass

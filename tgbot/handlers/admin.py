@@ -1,11 +1,21 @@
 from aiogram import Router, Bot
+
+from loader import config
 from tgbot.dal import db_django_commands as commands
 from aiogram.types import Message
-
 from tgbot.filters.admin import AdminFilter
 
 admin_router = Router()
 admin_router.message.filter(AdminFilter())
+
+
+async def send_income_user(message: Message, bot: Bot):
+    for admin_id in config.tg_bot.admin_ids:
+        count = await commands.count_users()
+        await bot.send_message(admin_id, "\n".join([
+            f'Was added new user to database {message.from_user.full_name}',
+            f'In database <b>{count}</b> users'
+        ]))
 
 
 @admin_router.message(commands=["dice"])
