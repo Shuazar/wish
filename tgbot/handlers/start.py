@@ -12,12 +12,12 @@ async def bot_start(message: Message, bot: Bot):
                                    username=message.from_user.username)
     await message.answer(
         "\n".join([
-            f'Hi, {message.from_user.full_name}',
-            f'We welcome you to our store'
+            f' שלום ,  {message.from_user.full_name}',
+            f'ברוכים הבאים'
         ])
     )
-    await message.answer(f'Hi, {message.from_user.full_name}! '
-                         f'press /menu')
+    await message.answer(f' שלום, {message.from_user.full_name}! '
+                         f'לחץ כדי להתחיל /menu')
     await send_income_user(message, bot)
 
 
