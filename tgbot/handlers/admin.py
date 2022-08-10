@@ -20,6 +20,7 @@ async def send_income_user(message: Message, bot: Bot):
 
 @admin_router.message(commands=["dice"])
 async def send_dice(message: Message, bot: Bot):
+    await bot.send_photo(chat_id=message.from_user.id, photo="https://www.fods.com/img/products_pic/2.jpg")
     await bot.send_dice(message.from_user.id)
 
 

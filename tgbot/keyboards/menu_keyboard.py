@@ -42,7 +42,7 @@ async def items_keyboard(category):
     items = await get_items(category)
     for item in items:
         builder.button(
-            text=f"{item.name} - ${item.price} ", callback_data=ItemsCallbackFactory(
+            text=f"{item.name} - {item.price} ₪", callback_data=ItemsCallbackFactory(
                 level=CURRENT_LEVEL+1, category=category, item_id=item.id
             )
         )
